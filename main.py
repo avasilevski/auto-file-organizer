@@ -1,5 +1,8 @@
 import os
 import shutil
+import time
+from watchdog.observers import Observer
+from watchdog.events import FileSystemEventHandler
 
 DOWNLOADS_PATH = os.path.expanduser("~/Downloads")
 
@@ -25,6 +28,12 @@ def get_category(filename):
 def organize_downloads():
     for item in os.listdir(DOWNLOADS_PATH):
         item_path = os.path.join(DOWNLOADS_PATH, item)
+        # Skip processed
+        if os.path.isdir(item_path):
+            continue
+        # Skip hidden/system files
+        if item.startswith('.'):
+            continue
         if os.path.isfile(item_path):
             category = get_category(item)
             category_path = os.path.join(DOWNLOADS_PATH, category)
@@ -35,5 +44,21 @@ def organize_downloads():
             except Exception as e:
                 print(f"Failed to move {item}: {e}")
 
-if __name__ == "__main__":
-    organize_downloads()
+class MyHandler(FileSystemEventHandler):
+    def on_created(self, event):
+        if not event.is_directory:
+            organize_downloads()
+            print(f"New file: {event.src_path}")
+
+
+print(f"Watching {DOWNLOADS_PATH} for new files...\nPress Ctrl+C to stop.")
+observer = Observer()
+observer.schedule(MyHandler(), path=DOWNLOADS_PATH, recursive=False)
+observer.start()
+
+try:
+    while True:
+        time.sleep(1)
+except KeyboardInterrupt:
+    observer.stop()
+observer.join()
