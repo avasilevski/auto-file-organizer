@@ -1,21 +1,9 @@
-import os
 import shutil
+import os
 import time
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
-
-DOWNLOADS_PATH = os.path.expanduser("~/Downloads")
-
-FILE_TYPES = {
-    'Images': ['.jpg', '.jpeg', '.png', '.gif', '.bmp'],
-    'Documents': ['.pdf', '.docx', '.doc', '.txt', '.xls', '.xlsx'],
-    'Videos': ['.mp4', '.mov', '.avi', '.mkv'],
-    'Audio': ['.mp3', '.wav', '.aac'],
-    'Archives': ['.zip', '.rar', '.tar', '.gz'],
-    'Programs': ['.exe', '.msi', '.dmg', '.pkg'],
-    'Scripts': ['.py', '.sh', '.bat'],
-    'Others': []
-}
+from config import WORK_PATH, FILE_TYPES
 
 def get_category(filename):
     ext = os.path.splitext(filename)[1].lower()
@@ -26,8 +14,8 @@ def get_category(filename):
 
 
 def organize_downloads():
-    for item in os.listdir(DOWNLOADS_PATH):
-        item_path = os.path.join(DOWNLOADS_PATH, item)
+    for item in os.listdir(WORK_PATH):
+        item_path = os.path.join(WORK_PATH, item)
         # Skip processed
         if os.path.isdir(item_path):
             continue
@@ -36,7 +24,7 @@ def organize_downloads():
             continue
         if os.path.isfile(item_path):
             category = get_category(item)
-            category_path = os.path.join(DOWNLOADS_PATH, category)
+            category_path = os.path.join(WORK_PATH, category)
             os.makedirs(category_path, exist_ok=True)
             try:
                 shutil.move(item_path, os.path.join(category_path, item))
@@ -51,9 +39,11 @@ class MyHandler(FileSystemEventHandler):
             print(f"New file: {event.src_path}")
 
 
-print(f"Watching {DOWNLOADS_PATH} for new files...\nPress Ctrl+C to stop.")
+print(f"Watching {WORK_PATH} for new files...\nPress Ctrl+C to stop.")
+# Run initialy
+organize_downloads()
 observer = Observer()
-observer.schedule(MyHandler(), path=DOWNLOADS_PATH, recursive=False)
+observer.schedule(MyHandler(), path=WORK_PATH, recursive=False)
 observer.start()
 
 try:
