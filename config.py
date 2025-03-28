@@ -1,6 +1,8 @@
 import os
 
 WORK_PATH = os.path.expanduser("~/Downloads")
+LOG_DIR = "logs"
+LOG_FILE = os.path.join(LOG_DIR, "file_organizer.log")
 
 FILE_TYPES = {
     'Images': ['.jpg', '.jpeg', '.png', '.gif', '.bmp'],

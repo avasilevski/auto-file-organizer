@@ -1,9 +1,17 @@
 import shutil
 import os
 import time
+from datetime import datetime
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
-from config import WORK_PATH, FILE_TYPES
+from config import WORK_PATH, FILE_TYPES, LOG_DIR, LOG_FILE
+
+def log(item, category):
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    if not os.path.exists(LOG_DIR):
+        os.makedirs(LOG_DIR)
+    with open(LOG_FILE, "a") as log_file:
+        log_file.write(f"[{timestamp}] Moved: {item} → {category}/\n")
 
 def get_category(filename):
     ext = os.path.splitext(filename)[1].lower()
@@ -28,6 +36,7 @@ def organize_downloads():
             os.makedirs(category_path, exist_ok=True)
             try:
                 shutil.move(item_path, os.path.join(category_path, item))
+                log(item, category)
                 print(f"Moved: {item} → {category}/")
             except Exception as e:
                 print(f"Failed to move {item}: {e}")
