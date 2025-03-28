@@ -1,13 +1,13 @@
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 import time
-from organizer import organize_downloads
+from organizer import organize
 
 class Handler(FileSystemEventHandler):
     def on_created(self, event):
         if not event.is_directory:
             time.sleep(1)
-            organize_downloads()
+            organize()
 
 class WatcherHandler:
     def __init__(self):

@@ -10,7 +10,7 @@ def get_category(filename):
             return category
     return "Others"
 
-def organize_downloads():
+def organize():
     for item in os.listdir(WORK_PATH):
         item_path = os.path.join(WORK_PATH, item)
         if os.path.isdir(item_path) or item.startswith("."):
