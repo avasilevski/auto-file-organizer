@@ -12,12 +12,7 @@ def log_move(src, dest):
     category = os.path.basename(os.path.dirname(dest))
     # Call to the C++ subprocess
     cmd_arg = f"Moved: {filename} → {category}/"
-    result = subprocess.run(
+    subprocess.run(
         ["../build/main.out", cmd_arg],
-        cwd=CWD,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        text=True
+        cwd=CWD
     )
-    print("STDOUT:", result.stdout)
-    print("STDERR:", result.stderr)

@@ -1,7 +1,10 @@
 import os
+from dotenv import load_dotenv
+from pathlib import Path
 
-# Placeholder paths (to be overridden in config.local.py)
-WORK_PATH = os.getenv("WORK_PATH", "~/Downloads")
+load_dotenv()
+
+WORK_PATH = os.getenv("WORK_PATH", str(Path.home() / "Downloads"))
 LOG_DIR = os.getenv("LOG_DIR", "logs")
 LOG_FILE = os.path.join(LOG_DIR, os.getenv("LOG_FILE", "file_organizer.log"))
 CWD = os.getenv("CWD", "/path/to/cpp")
@@ -16,8 +19,3 @@ FILE_TYPES = {
     'Scripts': ['.py', '.sh', '.bat'],
     'Others': []
 }
-
-try:
-    from config.local import *  # Override any variables if config.local.py exists
-except ImportError:
-    pass
