@@ -1,7 +1,18 @@
 import os
 import shutil
-from src.config import WORK_PATH, FILE_TYPES
+import subprocess
+from src.config import WORK_PATH, FILE_TYPES, CWD
 from src.logger import log_move
+
+def log(src, dest):
+    filename = os.path.basename(src)
+    category = os.path.basename(os.path.dirname(dest))
+    # Call to the C++ subprocess
+    cmd_arg = f"Moved: {filename} → {category}/"
+    subprocess.run(
+        ["../build/main.out", cmd_arg],
+        cwd=CWD
+    )
 
 def get_category(filename):
     ext = os.path.splitext(filename)[1].lower()
@@ -19,4 +30,4 @@ def organize():
         dest_dir = os.path.join(WORK_PATH, category)
         os.makedirs(dest_dir, exist_ok=True)
         shutil.move(item_path, os.path.join(dest_dir, item))
-        log_move(item_path, os.path.join(dest_dir, item))
+        log(item_path, os.path.join(dest_dir, item))
