@@ -1,12 +1,6 @@
-import os
-
-
 import time
 from src.config import WORK_PATH
 from src.watcher import WatcherHandler, Handler
-
-print("🐍 Current working dir:", os.getcwd())
-print("📂 WORK_PATH =", WORK_PATH)
 
 print(f"Watching {WORK_PATH} for new files...\nPress Ctrl+C to stop.")
 
