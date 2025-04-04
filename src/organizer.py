@@ -1,7 +1,7 @@
 import os
 import shutil
-from config import WORK_PATH, FILE_TYPES
-from logger import log_move
+from src.config import WORK_PATH, FILE_TYPES
+from src.logger import log_move
 
 def get_category(filename):
     ext = os.path.splitext(filename)[1].lower()

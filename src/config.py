@@ -1,8 +1,10 @@
 import os
 
-WORK_PATH = os.path.expanduser("~/Downloads")
-LOG_DIR = "logs"
-LOG_FILE = os.path.join(LOG_DIR, "file_organizer.log")
+# Placeholder paths (to be overridden in config.local.py)
+WORK_PATH = os.getenv("WORK_PATH", "~/Downloads")
+LOG_DIR = os.getenv("LOG_DIR", "logs")
+LOG_FILE = os.path.join(LOG_DIR, os.getenv("LOG_FILE", "file_organizer.log"))
+CWD = os.getenv("CWD", "/path/to/cpp")
 
 FILE_TYPES = {
     'Images': ['.jpg', '.jpeg', '.png', '.gif', '.bmp'],
@@ -14,3 +16,8 @@ FILE_TYPES = {
     'Scripts': ['.py', '.sh', '.bat'],
     'Others': []
 }
+
+try:
+    from config.local import *  # Override any variables if config.local.py exists
+except ImportError:
+    pass

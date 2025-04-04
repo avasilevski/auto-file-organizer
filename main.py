@@ -1,6 +1,6 @@
 import time
-from config import WORK_PATH
-from watcher import WatcherHandler, Handler
+from src.config import WORK_PATH
+from src.watcher import WatcherHandler, Handler
 
 print(f"Watching {WORK_PATH} for new files...\nPress Ctrl+C to stop.")
 

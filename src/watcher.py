@@ -1,7 +1,7 @@
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 import time
-from organizer import organize
+from src.organizer import organize
 
 class Handler(FileSystemEventHandler):
     def on_created(self, event):
