@@ -2,7 +2,6 @@ import os
 import shutil
 import subprocess
 from src.config import WORK_PATH, FILE_TYPES, CWD
-from src.logger import log_move
 
 def log(src, dest):
     filename = os.path.basename(src)
