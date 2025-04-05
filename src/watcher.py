@@ -2,12 +2,16 @@ from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 import time
 from src.organizer import organize
+from src.extractor import extract
+from src.analyzer_deteministic import get_category
 
 class Handler(FileSystemEventHandler):
     def on_created(self, event):
         if not event.is_directory:
             time.sleep(1)
-            organize()
+            metadata = extract(event.src_path)
+            category = get_category(event.src_path)
+            organize(event.src_path, category)
 
 class WatcherHandler:
     def __init__(self):

@@ -1,7 +1,7 @@
 import os
 import shutil
 import subprocess
-from src.config import WORK_PATH, FILE_TYPES, CWD
+from src.config import WORK_PATH, CWD
 
 def log(src, dest):
     filename = os.path.basename(src)
@@ -13,20 +13,11 @@ def log(src, dest):
         cwd=CWD
     )
 
-def get_category(filename):
-    ext = os.path.splitext(filename)[1].lower()
-    for category, exts in FILE_TYPES.items():
-        if ext in exts:
-            return category
-    return "Others"
-
-def organize():
-    for item in os.listdir(WORK_PATH):
-        item_path = os.path.join(WORK_PATH, item)
-        if os.path.isdir(item_path) or item.startswith("."):
-            continue
-        category = get_category(item)
-        dest_dir = os.path.join(WORK_PATH, category)
-        os.makedirs(dest_dir, exist_ok=True)
-        shutil.move(item_path, os.path.join(dest_dir, item))
-        log(item_path, os.path.join(dest_dir, item))
+def organize(file_path, category):
+    if os.path.isdir(file_path) or os.path.basename(file_path).startswith("."):
+        return
+    dest_dir = os.path.join(WORK_PATH, category)
+    os.makedirs(dest_dir, exist_ok=True)
+    dest_path = os.path.join(dest_dir, os.path.basename(file_path))
+    shutil.move(file_path, dest_path)
+    log(file_path, dest_path)
